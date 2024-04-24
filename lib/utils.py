@@ -43,7 +43,7 @@ def camel_to_snake(col_name):
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', col_name).lower()
 
 
-def upload_to_s3(local_path, s3_path):
+def upload_to_s3(local_path, s3_bucket, s3_path):
     """
     Takes a local file and uploads it to a user specified s3 path.
     
@@ -56,11 +56,10 @@ def upload_to_s3(local_path, s3_path):
     session = boto3.Session(
         aws_access_key_id=aws_access_key_id,
         aws_secret_access_key=aws_secret_access_key,
-        region_name='us-east-2'
     )
     s3 = session.resource('s3')
 
-    BUCKET = "test-hsd"
+    BUCKET = s3_bucket
     s3.Bucket(BUCKET).upload_file(local_path, s3_path)
 
 
