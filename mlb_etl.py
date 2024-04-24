@@ -198,7 +198,7 @@ def drop_pii_and_extra_fields(games_df):
     return games_df
 
 
-def add_random_id(games_df, random_seed=8675309):
+def add_random_id(games_df, random_seed=None):
     """
     Takes the MLB games dataset and a random_seed.
     Creates a 12-alphanumeric random ID and adds it as a column.
@@ -206,7 +206,8 @@ def add_random_id(games_df, random_seed=8675309):
     
     """
     
-    random.seed(random_seed)
+    if random_seed:
+        random.seed(random_seed)
     
     random_id_list = [''.join(random.choices(string.ascii_letters + string.digits, k=12)) for i in range(len(games_df))]
     games_df['random_id'] = random_id_list
@@ -215,7 +216,7 @@ def add_random_id(games_df, random_seed=8675309):
     return games_df
 
 
-def add_jenny(games_df, random_seed=8675309):
+def add_jenny(games_df, random_seed=None):
     """
     Takes the MLB games dataset and a random_seed.
     Randomly assigns rows a number between -150 to 150
@@ -223,7 +224,8 @@ def add_jenny(games_df, random_seed=8675309):
     
     """
     
-    random.seed(random_seed)
+    if random_seed:
+        random.seed(random_seed)
     
     jenny_list = [random.random()*300 - 150 for i in range(len(games_df))]
     games_df['jenny'] = jenny_list
@@ -259,9 +261,9 @@ def run_etl(start_date, end_date):
 
     mlb_games_with_weather_data_clean = drop_pii_and_extra_fields(mlb_games_with_weather_data)
 
-    mlb_games_with_rand_id = add_random_id(mlb_games_with_weather_data_clean)
+    mlb_games_with_rand_id = add_random_id(mlb_games_with_weather_data_clean, random_seed=8675309)
 
-    mlb_games_with_jenny = add_jenny(mlb_games_with_rand_id)
+    mlb_games_with_jenny = add_jenny(mlb_games_with_rand_id, random_seed=8675309)
     
     os.makedirs('data_backups', exist_ok=True)
     mlb_games_with_jenny.to_csv('data_backups/mlb_games.csv')
