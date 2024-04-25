@@ -266,13 +266,13 @@ def run_etl(start_date, end_date):
     mlb_games_with_jenny = add_jenny(mlb_games_with_rand_id, random_seed=8675309)
     
     os.makedirs('data_backups', exist_ok=True)
-    mlb_games_with_jenny.to_csv('data_backups/mlb_games.csv')
+    mlb_games_with_jenny.to_csv('data_backups/mlb_games.csv', index=False)
     mlb_games_with_jenny.to_parquet('data_backups/mlb_games.parquet')
     mlb_games_with_jenny.to_feather('data_backups/mlb_games.feather')
     
-    upload_to_s3('data_backups/mlb_games.csv', 'dump/mlb_games.csv')
-    upload_to_s3('data_backups/mlb_games.parquet', 'dump/mlb_games.parquet')
-    upload_to_s3('data_backups/mlb_games.feather', 'dump/mlb_games.feather')
+    upload_to_s3('data_backups/mlb_games.csv', 'test-hsd', 'dump/mlb_games.csv')
+    upload_to_s3('data_backups/mlb_games.parquet', 'test-hsd', 'dump/mlb_games.parquet')
+    upload_to_s3('data_backups/mlb_games.feather', 'test-hsd', 'dump/mlb_games.feather')
     print('successfully uploaded the transformed MLB games data to S3')
 
 
