@@ -65,9 +65,21 @@ def upload_to_s3(local_path, s3_bucket, s3_path):
 
 def write_to_postgres(df, table_name):
     """
-    
+    Takes a dataframe and writes it to a PG database as a table
     
     """
+
+    load_dotenv()
+    user = os.getenv('pg_user')
+    password = os.getenv('pg_password')
+    end_point = os.getenv('pg_endpoint')
+    database = os.getenv('pg_database')
     
-    engine = create_engine('postgresql://username:password@localhost:5432/mydatabase')
+    create_engine_arg = 'postgresql://{user}:{password}@{end_point}/{database}'.format(
+        user=user,
+        password=password,
+        end_point=end_point,
+        database=database,
+    )
+    engine = create_engine(create_engine_arg)
     df.to_sql(table_name, engine)
