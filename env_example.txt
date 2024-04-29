@@ -1,0 +1,6 @@
+aws_access_key_id="your aws access key"
+aws_secret_access_key="your aws secret access key"
+pg_user="postgres username"
+pg_password="postgres password",
+pg_endpoint="postgres database url"
+pg_database="database or schema name"
