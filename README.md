@@ -9,6 +9,8 @@ This application runs an ETL that:
 5. Drops 3 versions of the MLB table into S3 (3 versions are .csv, .feather, and .parquet)
 6. Writes the MLB games table to Postgres
 
+### Access/Permission
+In order to send the data to external endpoints (S3 and Postgres), a file named ".env" should be included in the folder (will not be included in the repo since hidden files are ignored by git). The content should look like the contents of "env_example.txt" file with the correct credentials.
 
 ## Documention/Write-Up Questions
 
