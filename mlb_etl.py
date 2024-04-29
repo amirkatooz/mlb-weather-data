@@ -8,7 +8,8 @@ from lib.utils import (
     WEATHER_API_URL,
     make_api_call,
     camel_to_snake,
-    upload_to_s3
+    upload_to_s3,
+    write_to_postgres,
 )
 
 
@@ -266,14 +267,20 @@ def run_etl(start_date, end_date):
     mlb_games_with_jenny = add_jenny(mlb_games_with_rand_id, random_seed=8675309)
     
     os.makedirs('data_backups', exist_ok=True)
-    mlb_games_with_jenny.to_csv('data_backups/mlb_games.csv', index=False)
-    mlb_games_with_jenny.to_parquet('data_backups/mlb_games.parquet')
-    mlb_games_with_jenny.to_feather('data_backups/mlb_games.feather')
+    mlb_games_with_jenny.to_csv('data_backups/amir_test_data_file.csv', index=False)
+    mlb_games_with_jenny.to_parquet('data_backups/amir_test_data_file.parquet')
+    mlb_games_with_jenny.to_feather('data_backups/amir_test_data_file.feather')
+
+    s3_bucket = 'default-us-east-2-dataeng-assessment'
     
-    upload_to_s3('data_backups/mlb_games.csv', 'test-hsd', 'dump/mlb_games.csv')
-    upload_to_s3('data_backups/mlb_games.parquet', 'test-hsd', 'dump/mlb_games.parquet')
-    upload_to_s3('data_backups/mlb_games.feather', 'test-hsd', 'dump/mlb_games.feather')
+    upload_to_s3('data_backups/amir_test_data_file.csv', s3_bucket, 'candidate0/amir_test_data_file.csv')
+    upload_to_s3('data_backups/amir_test_data_file.parquet', s3_bucket, 'candidate0/amir_test_data_file.parquet')
+    upload_to_s3('data_backups/amir_test_data_file.feather', s3_bucket, 'candidate0/amir_test_data_file.feather')
     print('successfully uploaded the transformed MLB games data to S3')
+
+    write_to_postgres(mlb_games_with_jenny, 'amir_test_data_table')
+    print('successfully wrote the transformed MLB games data to Postgres database')
+
 
 
 run_etl(start_date, end_date)
